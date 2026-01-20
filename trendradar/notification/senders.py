@@ -126,19 +126,28 @@ def send_to_feishu(
         )
         now = get_time_func() if get_time_func else datetime.now()
 
-        payload = {
-            "msg_type": "text",
-            "content": {
-                "total_titles": total_titles,
-                "timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
-                "report_type": report_type,
-                "text": strip_markdown(batch_content),
-            },
+        # 构建基础内容数据
+        base_content = {
+            "total_titles": total_titles,
+            "timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
+            "report_type": report_type,
         }
+
         if "flow/api/trigger-webhook" in webhook_url:
+            # 飞书捷径/自动化：保留 Markdown 格式以支持超链接
+            # 注意：需要在飞书捷径中配置接收 Markdown 格式
+            base_content["text"] = batch_content
             payload = {
                 "message_type": "text",
-                "content": payload["content"],
+                "content": base_content,
+            }
+        else:
+            # 普通机器人：去除 Markdown，使用纯文本
+            # 飞书普通机器人的 text 类型不支持 Markdown 超链接
+            base_content["text"] = strip_markdown(batch_content)
+            payload = {
+                "msg_type": "text",
+                "content": base_content,
             }
 
         try:
