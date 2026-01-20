@@ -132,9 +132,14 @@ def send_to_feishu(
                 "total_titles": total_titles,
                 "timestamp": now.strftime("%Y-%m-%d %H:%M:%S"),
                 "report_type": report_type,
-                "text": batch_content,
+                "text": strip_markdown(batch_content),
             },
         }
+        if "flow/api/trigger-webhook" in webhook_url:
+            payload = {
+                "message_type": "text",
+                "content": payload["content"],
+            }
 
         try:
             response = requests.post(

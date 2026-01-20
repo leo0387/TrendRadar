@@ -161,7 +161,7 @@ weight:
   hotness_weight: 0.1 # 热度权重
 
 # name 可以定义任意名称，只具有显示作用，即使项目运行了几天后，忽然改掉 name 也不会影响代码的正常运行
-platforms:
+platform_sources: &platform_sources
   - id: "toutiao"
     name: "今日头条"
   - id: "baidu"
@@ -184,3 +184,6 @@ platforms:
     name: "抖音"
   - id: "zhihu"
     name: "知乎"
+
+platforms:
+  sources: *platform_sources

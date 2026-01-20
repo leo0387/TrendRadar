@@ -318,7 +318,13 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
     config["WEIGHT_CONFIG"] = _load_weight_config(config_data)
 
     # 平台配置
-    config["PLATFORMS"] = config_data.get("platforms", [])
+    platforms_config = config_data.get("platforms", [])
+    if isinstance(platforms_config, dict):
+        config["PLATFORMS"] = platforms_config.get("sources", [])
+    elif isinstance(platforms_config, list):
+        config["PLATFORMS"] = platforms_config
+    else:
+        config["PLATFORMS"] = []
 
     # 存储配置
     config["STORAGE"] = _load_storage_config(config_data)
