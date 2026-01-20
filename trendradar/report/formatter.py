@@ -51,7 +51,7 @@ def format_title_for_platform(
 
     if platform == "feishu":
         if link_url:
-            formatted_title = f"[{cleaned_title}]({link_url})"
+            formatted_title = f"{cleaned_title} {link_url}"
         else:
             formatted_title = cleaned_title
 
